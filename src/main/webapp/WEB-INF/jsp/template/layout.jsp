@@ -19,13 +19,13 @@
 </head>
 <body>
 	<div class="container">
-		<header>
+		<header class="bg-info">
 			<jsp:include page="../include/gnb.jsp"/>
 		</header>
-		<section class="contents bg-warning d-flex justify-content-center">
+		<section class="contents d-flex justify-content-center">
 			<jsp:include page="../${viewName}.jsp"/>
 		</section>
-		<footer>
+		<footer class="bg-info">
 			<jsp:include page="../include/footer.jsp"/>
 		</footer>
 	</div>
