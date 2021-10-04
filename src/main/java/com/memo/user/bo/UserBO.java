@@ -18,4 +18,8 @@ public class UserBO {
 	public void addUser(User user) {
 		userDao.insertUser(user);
 	}
+	
+	public User getUserByLoginIdAndPassword(String loginId, String password) {
+		return userDao.selectUserByLoginIdAndPassword(loginId, password);
+	}
 }
