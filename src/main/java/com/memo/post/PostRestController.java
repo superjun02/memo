@@ -21,6 +21,14 @@ public class PostRestController {
 	@Autowired
 	private PostBO postBo;
 	
+	/**
+	 * 글쓰기 화면 
+	 * @param subject
+	 * @param content
+	 * @param file
+	 * @param request
+	 * @return
+	 */
 	@PostMapping("/create")
 	public Map<String, Object> create(
 			@RequestParam("subject") String subject,
@@ -41,6 +49,25 @@ public class PostRestController {
 		if (row > 0) {
 			result.put("result", "success");
 		}
+		// 결과값 response
+		
+		return result;
+	}
+	
+	@PostMapping("/update")
+	public Map<String, Object> update(
+			@RequestParam("postId") int postId,
+			@RequestParam("subject") String subject,
+			@RequestParam("content") String content,
+			@RequestParam(value = "file", required = false) MultipartFile file,
+			HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String loginId = (String) session.getAttribute("userLoginId");
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("result", "success");
+		
+		postBo.updatePost(postId, loginId, subject, content, file);
 		// 결과값 response
 		
 		return result;
