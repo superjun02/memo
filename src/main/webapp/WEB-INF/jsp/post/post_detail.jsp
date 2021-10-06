@@ -22,7 +22,7 @@
 		</div>
 		
 		<div class="w-100 d-flex justify-content-between pt-4">
-			<button type="button" id="deleteBtn" class="btn btn-secondary">삭제</button>
+			<button type="button" id="deleteBtn" class="btn btn-secondary" data-post-id="${post.id}">삭제</button>
 			
 			<div>
 				<a href="/post/post_list_view" class="btn btn-dark">목록으로</a>
@@ -35,9 +35,25 @@
 <script>
 	$(document).ready(function() {
 		$('#deleteBtn').on('click', function() {
-			if (confirm("내용을 지우시겠습니까?")) {
-				
-			}
+			
+			let postId = $(this).data('post-id');
+			
+			if (confirm("삭제 하시겠습니까?")) {
+				// ajax 통신으로 삭제 요청
+				$.ajax({
+					type: 'delete'
+					, url: '/post/delete'
+					, data: {'postId':postId}
+					, success: function(data) {
+						if (data.result == 'success') {
+							alert('삭제 되었습니다');
+							location.href = '/post/post_list_view';
+						}
+					}, error: function(e) {
+						alert("메모를 삭제하는데 실패했습니다. " + e);
+					}
+				});
+			}	
 		});
 		
 		$('#updateBtn').on('click', function() {

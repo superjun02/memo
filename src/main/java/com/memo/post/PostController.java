@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.util.CollectionUtils;
 
 import com.memo.post.bo.PostBO;
 import com.memo.post.model.Post;
@@ -33,7 +34,9 @@ public class PostController {
 	 */
 	@RequestMapping("/post_list_view")
 	public String postListView(Model model,
-			HttpServletRequest request) {
+			HttpServletRequest request,
+			@RequestParam(value="prevId", required = false) Integer prevIdParam,
+			@RequestParam(value="nextId", required = false) Integer nextIdParam) {
 		// 글 목록들을 가져온다.
 		HttpSession session = request.getSession();
 		
@@ -42,11 +45,34 @@ public class PostController {
 			logger.info("[post_list_view] userId is null. " + userId);
 			return "redirect:/user/sign_in_view";
 		}
-		List<Post> postList = postBo.getPostListByUserId(userId);
+		List<Post> postList = postBo.getPostList(userId, prevIdParam, nextIdParam);
+		
+		int prevId = 0;
+		int nextId = 0;
+		
+		if (CollectionUtils.isEmpty(postList) == false) {
+			prevId = postList.get(0).getId();
+			nextId = postList.get(postList.size()-1).getId();
+			
+			// 이전이나 다음이 없는 경우 0으로 세팅한다.
+			
+			// 마지막페이지(다음 기준) 인 경우 0 으로 세팅
+			if (postBo.isLastPage(userId, nextId)) {
+				nextId = 0;
+			}
+			
+			// 첫번째페이지 (이전 기준)인 경우 0으로 세팅
+			if (postBo.isFirstPage(userId, prevId)) {
+				prevId = 0;
+			}
+		}
 		
 		// 모델에 담는다
+		model.addAttribute("prevId", prevId);
+		model.addAttribute("nextId", nextId);
 		model.addAttribute("postList", postList);
 		model.addAttribute("viewName", "post/post_list");
+		
 		return "template/layout";
 	}
 	
