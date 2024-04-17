@@ -67,6 +67,7 @@
 				if (data.code == 200) {
 					if (data.is_duplicated_id) {
 						$('#idCheckDuplicated').removeClass("d-none");
+						alert(data.date);
 					} else {
 						$('#idCheckOk').removeClass("d-none");
 					}

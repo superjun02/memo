@@ -1,6 +1,6 @@
 package com.memo.user.entity;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -36,9 +36,9 @@ public class UserEntity {
 	
 	@UpdateTimestamp
 	@Column(name = "createdAt", updatable = false)
-	private ZonedDateTime createdAt;
+	private LocalDate createdAt;
 	
 	@UpdateTimestamp
 	@Column(name = "updatedAt")
-	private ZonedDateTime updatedAt;
+	private LocalDate updatedAt;
 }

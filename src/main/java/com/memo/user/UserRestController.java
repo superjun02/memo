@@ -29,6 +29,7 @@ public class UserRestController {
 		} else {
 			result.put("code", 200);
 			result.put("is_duplicated_id", true);
+			result.put("date", userBO.getUserEntityByLoginId(loginId).getCreatedAt());
 		}
 		
 		return result;
