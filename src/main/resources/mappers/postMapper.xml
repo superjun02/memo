@@ -22,7 +22,7 @@
  		WHERE
  			`userId` = #{userId}
  		ORDER BY
- 			`createdAt` 
+ 			`id`
  		DESC
  	</select>
  </mapper>

@@ -19,9 +19,9 @@
 			<c:forEach items="${postList}" var="post" varStatus="status">
 				<tr>
 					<td>${fn:length(postList) - status.index}</td>
-					<td>${post.subject}</td>
-					<td>${post.createdAt}</td>
-					<td>${post.updatedAt}</td>
+					<td><a href="/post/post-detail-view?postId=${post.id}">${post.subject}</a></td>
+					<td><fmt:formatDate value="${post.createdAt}" pattern="yyyy년 M월 d일 HH:mm:ss" /></td>
+					<td><fmt:formatDate value="${post.updatedAt}" pattern="yyyy년 M월 d일 HH:mm:ss" /></td>
 				</tr>	
 			</c:forEach>
 		</tbody>
