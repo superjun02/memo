@@ -8,4 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PostMapper {
 	public List<Map<String, Object>> selectPostList();
+
+	public List<Map<String, Object>> selectPostListByUserId(int userId);
 }

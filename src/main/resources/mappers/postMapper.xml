@@ -8,4 +8,21 @@
  		FROM
  			`post`
  	</select>
+ 	<select id="selectPostListByUserId" resultType="map">
+ 		SELECT
+ 			`id`
+			,`userId`
+			,`subject`
+			,`content`
+			,`imagePath`
+			,`createdAt`
+			,`updatedAt`
+ 		FROM
+ 			`post`
+ 		WHERE
+ 			`userId` = #{userId}
+ 		ORDER BY
+ 			`createdAt` 
+ 		DESC
+ 	</select>
  </mapper>
