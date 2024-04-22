@@ -32,4 +32,15 @@ public class PostController {
 		model.addAttribute("viewName", "post/postList");
 		return "template/layout";
 	}
+	
+	@GetMapping("/post-create-view")
+	public String postCreateView(Model model, HttpSession session) {
+		Integer userId = (Integer) session.getAttribute("userId");
+		if (userId == null) {
+			return "redirect:/user/sign-in-view";
+		}
+		model.addAttribute("viewName", "post/postCreate");
+		
+		return "template/layout";
+	}
 }
