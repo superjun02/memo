@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.memo.post.bo.PostBO;
 import com.memo.post.domain.Post;
@@ -40,6 +41,23 @@ public class PostController {
 			return "redirect:/user/sign-in-view";
 		}
 		model.addAttribute("viewName", "post/postCreate");
+		
+		return "template/layout";
+	}
+	
+	@GetMapping("/post-detail-view")
+	public String postDetailView(
+			@RequestParam("postId") int postId, 
+			Model model, HttpSession session) {
+		Integer userId = (Integer) session.getAttribute("userId");
+		if (userId == null) {
+			return "redirect:/user/sign-in-view";
+		}
+		// select DB
+		Post post = postBO.getPostByPostIdAndUserId(postId, userId);
+		
+		model.addAttribute("viewName", "post/postDetail");
+		model.addAttribute("post", post);
 		
 		return "template/layout";
 	}

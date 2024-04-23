@@ -8,7 +8,7 @@
  		FROM
  			`post`
  	</select>
- 	<select id="selectPostListByUserId" resultType="map">
+ 	<select id="selectPostListByUserId" resultType="com.memo.post.domain.Post">
  		SELECT
  			`id`
 			,`userId`
@@ -46,4 +46,20 @@
 			,NOW()
 		)
  	</insert>
+ 	<select id="selectPostByPostIdAndUserId" resultType="com.memo.post.domain.Post" parameterType="map">
+ 		SELECT
+ 			`id`
+			,`userId`
+			,`subject`
+			,`content`
+			,`imagePath`
+			,`createdAt`
+			,`updatedAt`
+ 		FROM
+ 			`post`
+ 		WHERE
+ 			`userId` = #{userId}
+ 		AND
+ 			`id` = #{postId}
+ 	</select>
  </mapper>
