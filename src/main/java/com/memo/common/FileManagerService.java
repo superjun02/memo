@@ -9,6 +9,9 @@ import java.nio.file.Paths;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class FileManagerService {
 	public static final String FILE_UPLOAD_PATH = "C:\\이상준\\6_spring_project\\memo\\memo_workspace\\images/"; // 학원용
@@ -25,7 +28,7 @@ public class FileManagerService {
 		
 		File directory = new File(filePath);
 		if (directory.mkdir() == false) {
-			// 폴더 생성 실패시 이미지 경로 null 리턴
+			log.info("[파일매니저 업로드] 폴더 생성 실패");
 			return null;
 		}
 		
@@ -36,13 +39,39 @@ public class FileManagerService {
 			Path path = Paths.get(filePath + file.getOriginalFilename());
 			Files.write(path, bytes);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("[파일 업로드] 파일업로드 실패. path:{}", filePath);
 		}
 		
 		// 파일 업로드가 성공하면 경로(path) return
 		// 주소는 이렇게 될 것이다. (예언)
 		//      /images/superjun02_18302020/penguin.png
 		return "/images/" + directoryName + file.getOriginalFilename();
+	}
+	
+	public void deleteFile(String imagePath) {
+		Path path = Paths.get(FILE_UPLOAD_PATH + imagePath.replace("/images/", ""));
+		
+		// 삭제할 이미지가 존재하는가?
+		if (Files.exists(path)) {
+			// 이미지 파일 삭제
+			try {
+				Files.delete(path);
+			} catch (IOException e) {
+				log.warn("[파일 매니저] 이미지 삭제 실패. path:{}", path.toString());
+				return;
+			}
+			
+			// 폴더(디렉토리) 삭제
+			path = path.getParent();
+			
+			if (Files.exists(path)) {
+				try {
+					Files.delete(path);
+				} catch (IOException e) {
+					log.warn("[파일 매니저] 이미지폴더 삭제 실패. path:{}", path.toString());
+					return;
+				}
+			}
+		}
 	}
 }
