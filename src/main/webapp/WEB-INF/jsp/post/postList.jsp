@@ -18,7 +18,7 @@
 		<tbody>
 			<c:forEach items="${postList}" var="post" varStatus="status">
 				<tr>
-					<td>${fn:length(postList) - status.index}</td>
+					<td>${post.id}</td>
 					<td><a href="/post/post-detail-view?postId=${post.id}">${post.subject}</a></td>
 					<td><fmt:formatDate value="${post.createdAt}" pattern="yyyy년 M월 d일 HH:mm:ss" /></td>
 					<td><fmt:formatDate value="${post.updatedAt}" pattern="yyyy년 M월 d일 HH:mm:ss" /></td>
@@ -26,7 +26,12 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	${userId123}
+	
+	<%-- 페이징 --%>
+	<div class="d-flex justify-content-center">
+		<a href="/post/post-list-view?prevId=${prevId}" class="mr-3">&lt;&lt; 이전</a>
+		<a href="/post/post-list-view?nextId=${nextId}" class="ml-3">다음 &gt;&gt;</a>
+	</div>
 	<div class="d-flex justify-content-end">
 		<a href="/post/post-create-view" class="btn btn-primary">글쓰기</a>
 	</div>
