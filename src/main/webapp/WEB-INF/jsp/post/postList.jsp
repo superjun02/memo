@@ -29,9 +29,14 @@
 	
 	<%-- 페이징 --%>
 	<div class="d-flex justify-content-center">
-		<a href="/post/post-list-view?prevId=${prevId}" class="mr-3">&lt;&lt; 이전</a>
+		<c:if test="${prevId ne 0}">
+			<a href="/post/post-list-view?prevId=${prevId}" class="mr-3">&lt;&lt; 이전</a>
+		</c:if>
+		<c:if test="${nextId ne 0}">
 		<a href="/post/post-list-view?nextId=${nextId}" class="ml-3">다음 &gt;&gt;</a>
+		</c:if>
 	</div>
+	
 	<div class="d-flex justify-content-end">
 		<a href="/post/post-create-view" class="btn btn-primary">글쓰기</a>
 	</div>

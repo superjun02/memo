@@ -1,5 +1,6 @@
 package com.memo.post.bo;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ public class PostBO {
 	// private Logger logger = LoggerFactory.getLogger(PostBO.class);
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	private static final int POST_MAX_SIZE = 3;
+	private static final int POST_MAX_SIZE = 5;
 	@Autowired
 	private PostMapper postMapper;
 	
@@ -38,6 +39,12 @@ public class PostBO {
 		if (prevId != null) { // 이전
 			standardId = prevId;
 			direction = "prev";
+			
+			List<Post> postList = postMapper.selectPostListByUserId(userId, standardId, direction, POST_MAX_SIZE);
+			
+			// reverse list
+			Collections.reverse(postList);
+			return postList;
 		} else if (nextId != null) { // 다음
 			standardId = nextId;
 			direction = "next";
@@ -99,6 +106,16 @@ public class PostBO {
 			fileManager.deleteFile(post.getImagePath());
 		}
 		postMapper.deletePostByPostId(postId);
+	}
+
+	public boolean isPrevLastPageByUserId(Integer userId, int prevId) {
+		int postId = postMapper.selectPostIdByUserIdSort(userId, "DESC");
+			return postId == prevId;
+	}
+
+	public boolean isNextLastPageByUserId(Integer userId, int nextId) {
+		int postId = postMapper.selectPostIdByUserIdSort(userId, "ASC");
+		return postId == nextId;
 	}
 
 }

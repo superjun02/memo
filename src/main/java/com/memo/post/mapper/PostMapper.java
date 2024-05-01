@@ -35,4 +35,8 @@ public interface PostMapper {
 			@Param("imagePath") String imagePath);
 
 	public void deletePostByPostId(int postId);
+
+	public int selectPostIdByUserIdSort(
+			@Param("userId") Integer userId,
+			@Param("sort") String sort);
 }

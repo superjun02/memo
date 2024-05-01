@@ -25,9 +25,6 @@ public class PostController {
 			@RequestParam(value = "prevId", required = false) Integer prevIdParam,
 			@RequestParam(value = "nextId", required = false) Integer nextIdParam) {
 		Integer userId = (Integer) session.getAttribute("userId");
-		if (userId == null) {
-			return "redirect:/user/sign-in-view";
-		}
 		
 		List<Post> postList = postBO.getPostListByUserId(userId, prevIdParam, nextIdParam);
 		int prevId = 0;
@@ -35,6 +32,18 @@ public class PostController {
 		if (postList.isEmpty() == false) {
 			prevId = postList.get(0).getId();
 			nextId = postList.get(postList.size() - 1).getId();
+			
+			// 이전 페이지의 끝인가?
+			// 글쓴이 == 로그인된 사람, post 테이블의 가장 큰 id와 같으면 이전 페이지 없음
+			if (postBO.isPrevLastPageByUserId(userId, prevId)) {
+				prevId = 0;
+			}
+			
+			// 다음 페이지의 끝인가?
+			// 글쓴이 == 로그인된 사람, post 테이블의 가장 작은 id와 같으면 다음 페이지 없음
+			if (postBO.isNextLastPageByUserId(userId, nextId)) {
+				nextId = 0;
+			}
 		}
 		
 		model.addAttribute("prevId", prevId);
@@ -46,10 +55,6 @@ public class PostController {
 	
 	@GetMapping("/post-create-view")
 	public String postCreateView(Model model, HttpSession session) {
-		Integer userId = (Integer) session.getAttribute("userId");
-		if (userId == null) {
-			return "redirect:/user/sign-in-view";
-		}
 		model.addAttribute("viewName", "post/postCreate");
 		
 		return "template/layout";
@@ -60,9 +65,7 @@ public class PostController {
 			@RequestParam("postId") int postId, 
 			Model model, HttpSession session) {
 		Integer userId = (Integer) session.getAttribute("userId");
-		if (userId == null) {
-			return "redirect:/user/sign-in-view";
-		}
+		
 		// select DB
 		Post post = postBO.getPostByPostIdAndUserId(postId, userId);
 		
